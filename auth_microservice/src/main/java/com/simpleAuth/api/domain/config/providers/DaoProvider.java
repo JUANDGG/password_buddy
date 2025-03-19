@@ -4,6 +4,7 @@ import com.simpleAuth.api.persistence.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -14,19 +15,22 @@ import org.springframework.stereotype.Component;
 public class DaoProvider {
 
     private final UserDetailsServiceImpl userDaoDetailsServiceImpl ;
-    private final DaoAuthenticationProvider daoAuthenticationProvider;
-    private final PasswordEncoder passwordEncoder ;
 
-    public DaoProvider(UserDetailsServiceImpl userDaoDetailsServiceImpl ,PasswordEncoder passwordEncoder,DaoAuthenticationProvider daoAuthenticationProvider) {
+
+    public DaoProvider(UserDetailsServiceImpl userDaoDetailsServiceImpl ) {
         this.userDaoDetailsServiceImpl = userDaoDetailsServiceImpl;
-        this.passwordEncoder = passwordEncoder ;
-        this.daoAuthenticationProvider = daoAuthenticationProvider;
+    }
+
+    @Bean
+    public PasswordEncoder bcryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
 
     @Bean
-    public AuthenticationProvider authenticationProvider (){
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+    public AuthenticationProvider authenticationProvider (PasswordEncoder bcryptPasswordEncoder){
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(bcryptPasswordEncoder);
         daoAuthenticationProvider.setUserDetailsService(userDaoDetailsServiceImpl);
         return daoAuthenticationProvider;
     }

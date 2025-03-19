@@ -1,0 +1,20 @@
+
+spring :
+  application:
+    name :
+      auth_microservice
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/auth_password_buddy
+    username: root
+    password: 123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+jwt :
+  tokenGenerate :
+    timeExpire : 86400000
+    secretkey : ed08c290d7e22f7bb324b15cbadce35b0b348564fd2d5f95752388d86d71bcca
+    userBackendGenerate : authBackend

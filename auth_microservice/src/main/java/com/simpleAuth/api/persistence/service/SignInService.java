@@ -42,7 +42,7 @@ public class SignInService {
 
         //validate if the user not exist
         if (userDetails == null) {
-            return new AuthResponseDTO(null, HttpStatus.BAD_REQUEST);
+            return new AuthResponseDTO("NONE", HttpStatus.BAD_REQUEST);
         }
         //validate the password is correct
         if(!passwordEncoder.matches(password, userDetails.getPassword())){
