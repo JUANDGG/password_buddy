@@ -7,11 +7,11 @@ import org.springframework.expression.spel.ast.OpInc;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Repository
 public interface PasswordManagementRepository extends JpaRepository<PasswordManagementEntity,Long> {
 
-    @Query("select * from PasswordManagementEntity where idUser = ?")
+    @Query("select p from PasswordManagementEntity p where p.idUser = ?1")
     List<PasswordManagementEntity> getALlCredentialsForIdUser (Long id_user);
 }

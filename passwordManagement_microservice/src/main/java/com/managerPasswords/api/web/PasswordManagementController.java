@@ -1,11 +1,13 @@
 package com.managerPasswords.api.web;
 
 
+import com.managerPasswords.api.domain.entities.PasswordManagementEntity;
+import com.managerPasswords.api.domain.pojo.PasswordManagamentDTO;
 import com.managerPasswords.api.persistence.services.PasswordManagementService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/my-passwords")
@@ -19,8 +21,15 @@ public class PasswordManagementController {
 
 
     @GetMapping
-    public ResponseEntity<?> getAll(){
-        return  ResponseEntity.ok(null);
+    public ResponseEntity<List<PasswordManagementEntity>> getAll(){
+        return  ResponseEntity.ok(passwordManagementService.getAllCredentialsForIdUser());
     }
+
+    @PostMapping
+    public ResponseEntity<Void> savePasswordSite(@RequestBody PasswordManagamentDTO passwordManagamentDTO){
+        passwordManagementService.savePasswordManagement(passwordManagamentDTO);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }

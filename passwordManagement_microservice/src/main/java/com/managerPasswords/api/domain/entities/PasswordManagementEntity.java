@@ -2,12 +2,11 @@ package com.managerPasswords.api.domain.entities;
 
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "password_management")
 @Getter @Setter @Builder
