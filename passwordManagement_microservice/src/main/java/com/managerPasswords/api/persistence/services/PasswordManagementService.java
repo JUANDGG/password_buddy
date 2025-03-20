@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PasswordManagementService {
@@ -39,13 +40,42 @@ public class PasswordManagementService {
 
     public void savePasswordManagement (PasswordManagamentDTO passwordManagamentDTO){
         Long idUserAuthenticate  = getCurrentUserId();
+        Optional<PasswordManagementEntity> searchByName = passwordManagementRepository.getSite(passwordManagamentDTO.nameSite(),idUserAuthenticate);
+
+        if(searchByName.isPresent()){
+            throw  new RuntimeException("no se pude crear otro sitio con el mismo nombre");
+        }
+
         PasswordManagementEntity passwordManagementEntity = PasswordManagamentMapper.toModel(idUserAuthenticate, passwordManagamentDTO);
         passwordManagementRepository.save(passwordManagementEntity);
     }
 
+    public void putPasswordManagement (PasswordManagamentDTO passwordManagamentDTO){
+        Long idUserAuthenticate  = getCurrentUserId();
+
+        Optional<PasswordManagementEntity> searchByName = passwordManagementRepository.getSite(passwordManagamentDTO.nameSite(),idUserAuthenticate);
+
+        if(searchByName.isEmpty()){
+            //handle this exeption
+            throw  new RuntimeException("no se pude modificar algo que no existe");
+        }
+
+        PasswordManagementEntity model =searchByName.get();
+        model.setIdUser(idUserAuthenticate);
+        model.setNameSite(passwordManagamentDTO.nameSite());
+        model.setPasswordSite(passwordManagamentDTO.passwordSite());
+
+        passwordManagementRepository.save(model);
+    }
 
 
-
-
+    public void deletePasswordManagement (String nameSite){
+        Long idUserAuthenticate  = getCurrentUserId();
+        Optional<PasswordManagementEntity> searchByName = passwordManagementRepository.getSite(nameSite,idUserAuthenticate);
+        if(searchByName.isEmpty()){
+            throw  new RuntimeException("no se pude eliminar algo que no existe");
+        }
+        passwordManagementRepository.delete(searchByName.get());
+    }
 
 }

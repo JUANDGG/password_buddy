@@ -20,7 +20,6 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter ;
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)throws Exception{
         return httpSecurity
@@ -29,11 +28,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(http ->http
                         .requestMatchers(HttpMethod.GET,"/api/v1/my-passwords").hasAuthority("READ")
                         .requestMatchers(HttpMethod.POST,"/api/v1/my-passwords").hasAuthority("CREATE")
+                        .requestMatchers(HttpMethod.PUT,"/api/v1/my-passwords/{nameSite}").hasAuthority("UPDATE")
+                        .requestMatchers(HttpMethod.DELETE,"/api/v1/my-passwords/{nameSite}").hasAuthority("DELETE")
                         .anyRequest().denyAll()
                 )
                 .addFilterBefore(jwtFilter, BasicAuthenticationFilter.class)
                 .build();
-
     }
 
 

@@ -32,4 +32,17 @@ public class PasswordManagementController {
     }
 
 
+    @PutMapping("/{nameSite}")
+    public ResponseEntity<Void> putPasswordSite(@PathVariable String nameSite  ,@RequestBody PasswordManagamentDTO passwordManagamentDTO){
+        passwordManagementService.putPasswordManagement(passwordManagamentDTO);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{nameSite}")
+    public ResponseEntity<Void> deletePasswordSite(@PathVariable String nameSite ){
+        passwordManagementService.deletePasswordManagement(nameSite);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
