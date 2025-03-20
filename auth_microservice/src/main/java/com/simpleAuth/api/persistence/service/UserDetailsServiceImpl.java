@@ -1,6 +1,7 @@
 package com.simpleAuth.api.persistence.service;
 
 import com.simpleAuth.api.domain.models.UserModel;
+import com.simpleAuth.api.domain.pojo.CustomUserDetails;
 import com.simpleAuth.api.persistence.repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,11 +22,31 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository ;
 
-
-
     public UserDetailsServiceImpl(UserRepository userRepository){
         this.userRepository = userRepository;
     }
+
+
+    public CustomUserDetails  createUserDetail (UserModel userModel){
+        List<GrantedAuthority>authorityList = new ArrayList<>();
+        authorityList.add(new SimpleGrantedAuthority("READ"));
+        authorityList.add(new SimpleGrantedAuthority("CREATE"));
+        authorityList.add(new SimpleGrantedAuthority("UPDATE"));
+        authorityList.add(new SimpleGrantedAuthority("DELETE"));
+
+
+
+        return new CustomUserDetails(
+                userModel.getId(),
+                userModel.getEmail(),
+                userModel.getPassword(),
+                userModel.isEnabled(),
+                userModel.isAccountNoExpired(),
+                userModel.isCredentialNoExpired(),
+                userModel.isAccountNoLocked(),
+                authorityList);
+        }
+
 
 
 
@@ -35,22 +56,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(searchFindByEmail.isEmpty()){
             return  null;
         }
-
         UserModel userModel = searchFindByEmail.get();
-
-        List<GrantedAuthority>authorityList = new ArrayList<>();
-
-        authorityList.add(new SimpleGrantedAuthority(""));
-
-
-        return new User(
-                userModel.getEmail(),
-                userModel.getPassword(),
-                userModel.isEnabled(),
-                userModel.isAccountNoExpired(),
-                userModel.isCredentialNoExpired(),
-                userModel.isAccountNoLocked(),
-                authorityList);
-
+        return  createUserDetail(userModel);
     }
 }
+
+
+
+
+
+

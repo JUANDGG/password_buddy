@@ -2,6 +2,7 @@ package com.simpleAuth.api.persistence.service;
 import com.simpleAuth.api.domain.models.UserModel;
 import com.simpleAuth.api.domain.pojo.AuthBodyRequest;
 import com.simpleAuth.api.domain.pojo.AuthResponseDTO;
+import com.simpleAuth.api.domain.pojo.CustomUserDetails;
 import com.simpleAuth.api.domain.util.JwtUtil;
 import com.simpleAuth.api.persistence.repository.UserRepository;
 import jakarta.validation.constraints.Email;
@@ -35,31 +36,33 @@ public class SignUpService {
         String password = authBodyRequest.password();
 
 
-        UserDetails userDetails = userDetailService.loadUserByUsername(email);
+        CustomUserDetails customUserDetails =  (CustomUserDetails)userDetailService.loadUserByUsername(email);
 
         //validate if the user exist
-        if (userDetails != null) {
+        if (customUserDetails != null) {
             return new AuthResponseDTO(null, HttpStatus.BAD_REQUEST);
         }
 
 
-        userRepository.save(
-                UserModel.builder()
-                        .email(email)
-                        .password(passwordEncoder.encode(password))
-                        .isEnabled(true)
-                        .accountNoExpired(true)
-                        .accountNoLocked(true)
-                        .credentialNoExpired(true)
-                        .build()
-        );
+        UserModel userModel = UserModel.builder()
+                .email(email)
+                .password(passwordEncoder.encode(password))
+                .isEnabled(true)
+                .accountNoExpired(true)
+                .accountNoLocked(true)
+                .credentialNoExpired(true)
+                .build() ;
 
+        //save in the memory and database
+        CustomUserDetails user = userDetailService.createUserDetail(userModel);
+        userRepository.save(userModel);
 
-        String token =jwtUtil.createToken(
-                new UsernamePasswordAuthenticationToken(email,null, userDetails.getAuthorities())
-        );
+        System.out.print(user);
 
+        //generate token
+        String token =jwtUtil.createToken(userModel.getId(), new UsernamePasswordAuthenticationToken(email,null, user.getAuthorities()));
 
+        //response token and state of the authentication
         return new AuthResponseDTO(token, HttpStatus.ACCEPTED) ;
 
 

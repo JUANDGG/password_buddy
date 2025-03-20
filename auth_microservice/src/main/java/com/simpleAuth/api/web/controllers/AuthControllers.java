@@ -15,8 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 public class AuthControllers {
 
-    private SignInService signInService ;
-    private SignUpService signUpService ;
+    private final SignInService signInService ;
+    private final SignUpService signUpService ;
+
+    public AuthControllers (SignInService signInService ,SignUpService signUpService){
+        this.signInService = signInService ;
+        this.signUpService = signUpService;
+    }
 
 
     @PostMapping("/sign-in")

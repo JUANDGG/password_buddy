@@ -14,6 +14,7 @@
 
   <modules>
       <module>auth_microservice</module>
+      <module>passwordManagement_microservice</module>
   </modules>
 
   <name>drubbyService</name>
