@@ -35,7 +35,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         authorityList.add(new SimpleGrantedAuthority("DELETE"));
 
 
-
         return new CustomUserDetails(
                 userModel.getId(),
                 userModel.getEmail(),
@@ -46,7 +45,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 userModel.isAccountNoLocked(),
                 authorityList);
         }
-
 
 
 

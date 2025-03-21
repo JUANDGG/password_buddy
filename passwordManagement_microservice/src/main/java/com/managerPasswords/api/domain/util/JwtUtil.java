@@ -50,17 +50,10 @@ public class JwtUtil {
 
     }
 
-    public DecodedJWT validateAndDecodifiedToken (String token){
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(this.secretKey);
-
-            JWTVerifier verifier =  JWT.require(algorithm).withIssuer(this.userBackend).build();
-
-            return verifier.verify(token) ;
-
-        } catch (JWTVerificationException exception) {
-            throw new JWTVerificationException("token no valido");
-        }
+    public DecodedJWT validateAndDecodifiedToken (String token)throws JWTVerificationException{
+        Algorithm algorithm = Algorithm.HMAC256(this.secretKey);
+        JWTVerifier verifier =  JWT.require(algorithm).withIssuer(this.userBackend).build();
+        return verifier.verify(token) ;
     }
 
 

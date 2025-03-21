@@ -40,7 +40,7 @@ public class PasswordManagementService {
 
     public void savePasswordManagement (PasswordManagamentDTO passwordManagamentDTO){
         Long idUserAuthenticate  = getCurrentUserId();
-        Optional<PasswordManagementEntity> searchByName = passwordManagementRepository.getSite(passwordManagamentDTO.nameSite(),idUserAuthenticate);
+        Optional<PasswordManagementEntity> searchByName = passwordManagementRepository.getSite(passwordManagamentDTO.getNameSite(),idUserAuthenticate);
 
         if(searchByName.isPresent()){
             throw  new RuntimeException("no se pude crear otro sitio con el mismo nombre");
@@ -53,7 +53,7 @@ public class PasswordManagementService {
     public void putPasswordManagement (PasswordManagamentDTO passwordManagamentDTO){
         Long idUserAuthenticate  = getCurrentUserId();
 
-        Optional<PasswordManagementEntity> searchByName = passwordManagementRepository.getSite(passwordManagamentDTO.nameSite(),idUserAuthenticate);
+        Optional<PasswordManagementEntity> searchByName = passwordManagementRepository.getSite(passwordManagamentDTO.getNameSite(),idUserAuthenticate);
 
         if(searchByName.isEmpty()){
             //handle this exeption
@@ -62,8 +62,8 @@ public class PasswordManagementService {
 
         PasswordManagementEntity model =searchByName.get();
         model.setIdUser(idUserAuthenticate);
-        model.setNameSite(passwordManagamentDTO.nameSite());
-        model.setPasswordSite(passwordManagamentDTO.passwordSite());
+        model.setNameSite(passwordManagamentDTO.getNameSite());
+        model.setPasswordSite(passwordManagamentDTO.getPasswordSite());
 
         passwordManagementRepository.save(model);
     }

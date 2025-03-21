@@ -4,6 +4,7 @@ package com.managerPasswords.api.web;
 import com.managerPasswords.api.domain.entities.PasswordManagementEntity;
 import com.managerPasswords.api.domain.pojo.PasswordManagamentDTO;
 import com.managerPasswords.api.persistence.services.PasswordManagementService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,20 +27,21 @@ public class PasswordManagementController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> savePasswordSite(@RequestBody PasswordManagamentDTO passwordManagamentDTO){
+    public ResponseEntity<Void> savePasswordSite(@RequestBody @Valid PasswordManagamentDTO passwordManagamentDTO){
         passwordManagementService.savePasswordManagement(passwordManagamentDTO);
         return ResponseEntity.noContent().build();
     }
 
 
     @PutMapping("/{nameSite}")
-    public ResponseEntity<Void> putPasswordSite(@PathVariable String nameSite  ,@RequestBody PasswordManagamentDTO passwordManagamentDTO){
+    public ResponseEntity<Void> putPasswordSite(@PathVariable  String nameSite  ,@RequestBody  @Valid PasswordManagamentDTO passwordManagamentDTO){
+
         passwordManagementService.putPasswordManagement(passwordManagamentDTO);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{nameSite}")
-    public ResponseEntity<Void> deletePasswordSite(@PathVariable String nameSite ){
+    public ResponseEntity<Void> deletePasswordSite(@PathVariable  String nameSite ){
         passwordManagementService.deletePasswordManagement(nameSite);
         return ResponseEntity.noContent().build();
     }

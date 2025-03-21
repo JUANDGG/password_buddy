@@ -13,8 +13,8 @@ public abstract class PasswordManagamentMapper {
 
     public static  PasswordManagementEntity toModel (Long id_user ,PasswordManagamentDTO passwordManagamentDTO){
             return PasswordManagementEntity .builder()
-                    .nameSite(passwordManagamentDTO.nameSite())
-                    .passwordSite(passwordManagamentDTO.passwordSite())
+                    .nameSite(passwordManagamentDTO.getNameSite())
+                    .passwordSite(passwordManagamentDTO.getPasswordSite())
                     .idUser(id_user)
                     .build() ;
     }
